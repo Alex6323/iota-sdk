@@ -1,0 +1,28 @@
+[package]
+name = "cli-wallet-new"
+version = "1.0.0-rc.2"
+authors = [ "IOTA Stiftung" ]
+edition = "2021"
+homepage = "https://iota.org"
+description = "Command line interface application for the IOTA wallet library."
+license = "Apache-2.0"
+
+[[bin]]
+name = "wallet"
+path = "src/main.rs"
+
+[dependencies]
+iota-sdk = { path = "../sdk", default-features = false, features = [ "wallet", "tls", "storage", "rocksdb", "stronghold", "participation" ] }
+
+async-trait = { version = "0.1", default-features = false }
+clap = { version = "4.1.14", default-features = false, features = [ "env", "std", "color", "help", "usage", "error-context", "suggestions", "derive" ] }
+dialoguer = { version = "0.10.3", default-features = false, features = [ "history", "password" ] }
+dotenvy = { version = "0.15", default-features = false }
+eyre = { version = "0.6", default-features = false, features = [ "track-caller", "auto-install" ] }
+fern-logger = { version = "0.5.0", default-features = false }
+log = { version = "0.4.17", default-features = false }
+prefix-hex = { version = "0.7.0", default-features = false, features = [ "std" ] }
+serde_json = { version = "1.0.95", default-features = false }
+tracing = { version = "0.1", default-features = false, features = [ "std", "attributes", "release_max_level_debug" ] }
+tracing-subscriber = { version = "0.3", default-features = false, features = [ "std", "fmt", "ansi", "smallvec", "tracing-log", "local-time", "env-filter" ] }
+tokio = { version = "1.27", default-features = false, features = [ "fs", "macros", "rt-multi-thread", "signal" ] }
