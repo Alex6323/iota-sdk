@@ -1,0 +1,14 @@
+[alias]
+ci-test = "test --all-features --release"
+ci-clippy-all = "clippy --all-targets --all-features -- -D warnings"
+ci-doctest = "test --doc --all-features"
+ci-doc = "doc --all-features --no-deps --document-private-items"
+ci-fmt = "fmt --all -- --check"
+ci-test-int = "test --all-features --test *"
+ci-udeps = "udeps --all-targets --all-features"
+
+check-all = "check --all-features --all-targets"
+check-each = "hack check --each-feature --no-dev-deps"
+
+fix-clippy = "clippy --all-targets --all-features --fix"
+fix-fmt = "fmt --all"

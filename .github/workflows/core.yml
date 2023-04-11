@@ -62,8 +62,7 @@ jobs:
       - name: Run Cargo Test
         uses: actions-rs/cargo@v1
         with:
-          command: test
-          args: --all-features --release
+          command: ci-test
 
   lint:
     name: Lint
@@ -140,8 +139,7 @@ jobs:
       - name: Run Cargo Udeps
         uses: actions-rs/cargo@v1
         with:
-          command: udeps
-          args: --all-targets --all-features
+          command: ci-udeps
 
   check-format:
     name: Check Format
