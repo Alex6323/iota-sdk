@@ -16,7 +16,19 @@ from typing import List, Optional
 from dacite import from_dict
 
 class Account:
+    """Represents an account.
+
+    Attributes:
+        account_id (str | int): The account id.
+        handle: The account handle.
+    """
     def __init__(self, account_id: str | int, handle):
+        """Initializes an account.
+
+        Args:
+            account_id (str | int): The account id.
+            handle: The account handle.
+        """
         self.account_id = account_id
         self.handle = handle
 

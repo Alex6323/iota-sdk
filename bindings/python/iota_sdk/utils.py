@@ -17,6 +17,8 @@ if TYPE_CHECKING:
     from iota_sdk.types.block import Block
 
 class Utils():
+    """Collection of static utility methods.
+    """
 
     @staticmethod
     def bech32_to_hex(bech32: str) -> HexStr:

@@ -10,6 +10,12 @@ from typing import Any, Dict, List, Optional
 
 
 class Wallet():
+    """Represents an IOTA Wallet.
+
+    Attributes:
+        handle (wallet instance): the wallet handle
+    """
+
     def __init__(self, storage_path: Optional[str] = None, client_options: Optional[Dict[str, Any]] = None, coin_type: Optional[int] = None, secret_manager: Optional[LedgerNanoSecretManager | MnemonicSecretManager | SeedSecretManager | StrongholdSecretManager] = None):
         """Initialize the IOTA Wallet.
         """
@@ -32,7 +38,7 @@ class Wallet():
         return self.handle
 
     def create_account(self, alias: Optional[str] = None, bech32_hrp: Optional[str] = None):
-        """Create a new account
+        """Create a new account.
         """
         return self._call_method(
             'createAccount', {
@@ -42,17 +48,17 @@ class Wallet():
         )
 
     def get_account(self, account_id: str | int) -> Account:
-        """Get the account instance
+        """Get the account instance.
         """
         return Account(account_id, self.handle)
 
     def get_client(self):
-        """Get the client instance
+        """Get the client instance.
         """
         return Client(client_handle=get_client_from_wallet(self.handle))
 
     def get_secret_manager(self):
-        """Get the secret manager instance
+        """Get the secret manager instance.
         """
         return SecretManager(secret_manager_handle=get_secret_manager_from_wallet(self.handle))
 
@@ -66,7 +72,7 @@ class Wallet():
         return message
 
     def get_account_data(self, account_id: str | int):
-        """Get account data
+        """Get account data.
         """
         return self._call_method(
             'getAccount', {
@@ -75,7 +81,7 @@ class Wallet():
         )
 
     def get_accounts(self):
-        """Get accounts
+        """Get accounts.
         """
         return self._call_method(
             'getAccounts',
@@ -135,10 +141,10 @@ class Wallet():
         )
 
     def restore_backup(self, source: str, password: str):
-        """Restore a backup from a Stronghold file
-           Replaces client_options, coin_type, secret_manager and accounts. Returns an error if accounts were already created
-           If Stronghold is used as secret_manager, the existing Stronghold file will be overwritten. If a mnemonic was
-           stored, it will be gone.
+        """Restore a backup from a Stronghold file.
+        Replaces client_options, coin_type, secret_manager and accounts. Returns an error if accounts were already created
+        If Stronghold is used as secret_manager, the existing Stronghold file will be overwritten. If a mnemonic was
+        stored, it will be gone.
         """
         return self._call_method(
             'restoreBackup', {
@@ -216,7 +222,7 @@ class Wallet():
         )
 
     def start_background_sync(self, options: Optional[SyncOptions] = None, interval_in_milliseconds: Optional[int] = None):
-        """Start background sync.
+        """Start background syncing.
         """
         return self._call_method(
             'startBackgroundSync', {
@@ -233,15 +239,15 @@ class Wallet():
         )
 
     def listen(self, handler, events: Optional[List[int]] = None):
-        """Listen to wallet events, empty array or None will listen to all events
-           The default value for events is None
+        """Listen to wallet events, empty array or None will listen to all events.
+        The default value for events is None.
         """
         events_array = [] if events is None else events
         listen_wallet(self.handle, events_array, handler)
 
     def clear_listeners(self, events: Optional[List[int]] = None):
-        """Remove wallet event listeners, empty array or None will remove all listeners
-           The default value for events is None
+        """Remove wallet event listeners, empty array or None will remove all listeners.
+        The default value for events is None.
         """
         events_array = [] if events is None else events
         return self._call_method(

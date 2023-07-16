@@ -10,6 +10,13 @@ HD_WALLET_TYPE = 44
 HARDEN_MASK = 1 << 31;
 
 class CoinType(IntEnum):
+    """Coin types.
+
+    Attributes:
+        IOTA (4218): IOTA
+        SHIMMER (4219): SHIMMER
+        ETHER (60): ETHER
+    """
     IOTA = 4218
     SHIMMER = 4219
     ETHER = 60
@@ -19,21 +26,18 @@ class CoinType(IntEnum):
 
 
 class Node():
+    """Represents a node in the network.
+    """
+
     def __init__(self, url=None, jwt=None, username=None, password=None, disabled=None):
         """Initialize a Node
 
-        Parameters
-        ----------
-        url : string
-            Node url
-        jwt : string
-            JWT token
-        username : string
-            Username for basic authentication
-        password : string
-            Password for basic authentication
-        disabled : bool
-            Disable node
+        Args:
+            url (str, optional): Node url
+            jwt (str, optional): JWT token
+            username (str, optional): Username for basic authentication
+            password (str, optional): Password for basic authentication
+            disabled (bool, optional): Disable node
         """
         self.url = url
         self.jwt = jwt
@@ -59,15 +63,16 @@ class Node():
 
 
 class SendParams():
+    """Parameters to send a certain amount of coins to an address.
+    """
+
+    # TODO: flip arguments to make it consistent with the rest of the SDK
     def __init__(self, address, amount):
         """Initialize SendParams
 
-        Parameters
-        ----------
-        address : string
-            Address of the output
-        amount : int
-            Amount of the output
+        Args:
+            amount (int): Amount of the output
+            address (str): Address of the output
         """
         self.address = address
         self.amount = amount
