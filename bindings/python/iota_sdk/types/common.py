@@ -62,17 +62,16 @@ class Node():
         return config
 
 
-class SendParams():
-    """Parameters to send a certain amount of coins to an address.
+class AddressAndAmount():
+    """Helper class for options in Client::build_and_post_block().
     """
 
-    # TODO: flip arguments to make it consistent with the rest of the SDK
-    def __init__(self, address, amount):
-        """Initialize SendParams
+    def __init__(self, address: str, amount: int):
+        """Initialize AddressAndAmount.
 
         Args:
-            amount (int): Amount of the output
-            address (str): Address of the output
+            address (str): receive address
+            amount (int): amount of coins to send
         """
         self.address = address
         self.amount = amount

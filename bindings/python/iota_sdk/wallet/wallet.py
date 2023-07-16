@@ -37,20 +37,33 @@ class Wallet():
     def get_handle(self):
         return self.handle
 
-    def create_account(self, alias: Optional[str] = None, bech32_hrp: Optional[str] = None):
+    def create_account(self, alias: Optional[str] = None, bech32_hrp: Optional[str] = None) -> Account:
         """Create a new account.
+
+        Args:
+            alias (str, optional): the alias of the account
+            bech32_hrp (str, optional): the bech32 HRP of the account
+
+        Returns:
+            Account: an account instance
         """
-        return self._call_method(
+        account_data = self._call_method(
             'createAccount', {
                 'alias': self.__return_str_or_none(alias),
                 'bech32Hrp': self.__return_str_or_none(bech32_hrp),
             }
         )
+        return Account(account_data, self.handle)
 
     def get_account(self, account_id: str | int) -> Account:
         """Get the account instance.
         """
-        return Account(account_id, self.handle)
+        account_data = self._call_method(
+            'getAccount', {
+                'accountId': account_id,
+            }
+        )
+        return Account(account_data, self.handle)
 
     def get_client(self):
         """Get the client instance.

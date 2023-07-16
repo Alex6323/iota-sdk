@@ -10,44 +10,41 @@ from iota_sdk.types.common import HexStr
 from iota_sdk.types.native_token import NativeToken
 from iota_sdk.types.output_data import OutputData
 from iota_sdk.types.output_id import OutputId
+from iota_sdk.types.output import Output
+from iota_sdk.types.send_params import CreateAliasOutputParams, CreateNativeTokenParams, MintNftParams, SendNativeTokensParams, SendNftParams, SendParams
 from iota_sdk.types.transaction import Transaction
 from iota_sdk.types.transaction_options import TransactionOptions
 from typing import List, Optional
 from dacite import from_dict
+from dataclasses import dataclass
+
+
+@dataclass
+class AccountMetadata:
+    alias: str
+    coinType: int
+    index: int
+
 
 class Account:
     """Represents an account.
 
     Attributes:
-        account_id (str | int): The account id.
-        handle: The account handle.
+        meta (dict): account metadata.
+        handle: the account handle
     """
-    def __init__(self, account_id: str | int, handle):
-        """Initializes an account.
-
-        Args:
-            account_id (str | int): The account id.
-            handle: The account handle.
+    def __init__(self, meta: dict, handle):
+        """Initialize an account.
         """
-        self.account_id = account_id
+        self.meta = meta
         self.handle = handle
-
-    @_call_method_routine
-    def __str__(self):
-        message = {
-            'name': 'getAccount',
-            'data': {
-                'accountId': self.account_id,
-            }
-        }
-        return message
 
     @_call_method_routine
     def _call_account_method(self, method, data=None):
         message = {
             'name': 'callAccountMethod',
             'data': {
-                'accountId': self.account_id,
+                'accountId': self.meta["index"],
                 'method': {
                     'name': method,
                 }
@@ -57,6 +54,12 @@ class Account:
             message['data']['method']['data'] = data
 
         return message
+
+    def get_metadata(self) -> AccountMetadata:
+        """
+        Get the accounts metadata.
+        """
+        return AccountMetadata(self.meta["alias"], self.meta["coinType"], self.meta["index"])
 
     def prepare_burn(self, burn: Burn, options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
         """
@@ -113,7 +116,7 @@ class Account:
         return PreparedTransactionData(self, prepared)
 
     def prepare_create_alias_output(self,
-                                    params,
+                                    params: Optional[CreateAliasOutputParams] = None,
                                     options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
         """Create an alias output.
         """
@@ -246,7 +249,7 @@ class Account:
         )
         return [Transaction.from_dict(tx) for tx in transactions]
 
-    def prepare_create_native_token(self, params, options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
+    def prepare_create_native_token(self, params: CreateNativeTokenParams, options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
         """Create native token.
         """
         prepared = self._call_account_method(
@@ -285,16 +288,7 @@ class Account:
         )
         return PreparedTransactionData(self, prepared)
 
-    def minimum_required_storage_deposit(self, output) -> int:
-        """Minimum required storage deposit.
-        """
-        return int(self._call_account_method(
-            'minimumRequiredStorageDeposit', {
-                'output': output
-            }
-        ))
-
-    def prepare_mint_nfts(self, params, options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
+    def prepare_mint_nfts(self, params: List[MintNftParams], options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
         """Mint nfts.
         """
         prepared = self._call_account_method(
@@ -327,7 +321,7 @@ class Account:
             }
         )
 
-    def prepare_send(self, params, options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
+    def prepare_send(self, params: List[SendParams], options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
         """Prepare to send base coins.
         """
         prepared = self._call_account_method(
@@ -338,7 +332,7 @@ class Account:
         )
         return PreparedTransactionData(self, prepared)
 
-    def prepare_transaction(self, outputs, options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
+    def prepare_transaction(self, outputs: List[Output], options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
         """Prepare transaction.
         """
         prepared = self._call_account_method(
@@ -372,7 +366,7 @@ class Account:
             }
         ))
 
-    def send(self, params, options: Optional[TransactionOptions] = None) -> Transaction:
+    def send(self, params: List[SendParams], options: Optional[TransactionOptions] = None) -> Transaction:
         """Send base coins.
         """
         return Transaction.from_dict(self._call_account_method(
@@ -382,7 +376,7 @@ class Account:
             }
         ))
 
-    def prepare_send_native_tokens(self, params, options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
+    def prepare_send_native_tokens(self, params: List[SendNativeTokensParams], options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
         """Send native tokens.
         """
         prepared = self._call_account_method(
@@ -393,7 +387,7 @@ class Account:
         )
         return PreparedTransactionData(self, prepared)
 
-    def prepare_send_nft(self, params, options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
+    def prepare_send_nft(self, params: List[SendNftParams], options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
         """Send nft.
         """
         prepared = self._call_account_method(
@@ -459,7 +453,7 @@ class Account:
             }
         ))
 
-    def send_outputs(self, outputs, options: Optional[TransactionOptions] = None) -> Transaction:
+    def send_outputs(self, outputs: List[Output], options: Optional[TransactionOptions] = None) -> Transaction:
         """Send outputs in a transaction.
         """
         return Transaction.from_dict(self._call_account_method(

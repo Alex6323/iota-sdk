@@ -9,15 +9,11 @@ use iota_sdk::{
         input_selection::Burn, PreparedTransactionData, PreparedTransactionDataDto, SignedTransactionData,
         SignedTransactionDataDto,
     },
-    types::block::{
-        output::{dto::OutputDto, Output, Rent},
-        Error,
-    },
+    types::block::output::{dto::OutputDto, Output},
     wallet::account::{
         types::TransactionDto, Account, OutputDataDto, PreparedCreateNativeTokenTransactionDto, TransactionOptions,
     },
 };
-use primitive_types::U256;
 
 use crate::{method::AccountMethod, Response, Result};
 
@@ -103,14 +99,6 @@ pub(crate) async fn call_account_method_internal(account: &Account, method: Acco
             let transactions = account.incoming_transactions().await;
             Response::Transactions(transactions.iter().map(TransactionDto::from).collect())
         }
-        AccountMethod::MinimumRequiredStorageDeposit { output } => {
-            let output = Output::try_from_dto(output, account.client().get_token_supply().await?)?;
-            let rent_structure = account.client().get_rent_structure().await?;
-
-            let minimum_storage_deposit = output.rent_cost(&rent_structure);
-
-            Response::MinimumRequiredStorageDeposit(minimum_storage_deposit.to_string())
-        }
         AccountMethod::Outputs { filter_options } => {
             let outputs = account.outputs(filter_options).await?;
             Response::OutputsData(outputs.iter().map(OutputDataDto::from).collect())
@@ -151,7 +139,7 @@ pub(crate) async fn call_account_method_internal(account: &Account, method: Acco
             let data = account
                 .prepare_melt_native_token(
                     token_id,
-                    U256::try_from(&melt_amount).map_err(|_| Error::InvalidField("melt_amount"))?,
+                    melt_amount,
                     options.map(TransactionOptions::try_from_dto).transpose()?,
                 )
                 .await?;
@@ -174,7 +162,7 @@ pub(crate) async fn call_account_method_internal(account: &Account, method: Acco
             let data = account
                 .prepare_mint_native_token(
                     token_id,
-                    U256::try_from(&mint_amount).map_err(|_| Error::InvalidField("mint_amount"))?,
+                    mint_amount,
                     options.map(TransactionOptions::try_from_dto).transpose()?,
                 )
                 .await?;
