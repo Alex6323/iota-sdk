@@ -21,17 +21,24 @@ from dataclasses import dataclass
 
 @dataclass
 class AccountMetadata:
+    """Account metadata.
+
+    Attributes:
+        alias: The alias name of the account.
+        coinType: The type of coin managed with the account.
+        index: The account index.
+    """
     alias: str
     coinType: int
     index: int
 
 
 class Account:
-    """Represents an account.
+    """A wallet account.
 
     Attributes:
-        meta (dict): account metadata.
-        handle: the account handle
+        meta: Some account metadata.
+        handle: The account handle.
     """
     def __init__(self, meta: dict, handle):
         """Initialize an account.
@@ -56,14 +63,12 @@ class Account:
         return message
 
     def get_metadata(self) -> AccountMetadata:
-        """
-        Get the accounts metadata.
+        """Get the accounts metadata.
         """
         return AccountMetadata(self.meta["alias"], self.meta["coinType"], self.meta["index"])
 
     def prepare_burn(self, burn: Burn, options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
-        """
-        A generic `prepare_burn()` function that can be used to prepare the burn of native tokens, nfts, foundries and aliases.
+        """A generic `prepare_burn()` function that can be used to prepare the burn of native tokens, nfts, foundries and aliases.
         """
         prepared = self._call_account_method(
             'prepareBurn', {
@@ -289,7 +294,7 @@ class Account:
         return PreparedTransactionData(self, prepared)
 
     def prepare_mint_nfts(self, params: List[MintNftParams], options: Optional[TransactionOptions] = None) -> PreparedTransactionData:
-        """Mint nfts.
+        """Mint NFTs.
         """
         prepared = self._call_account_method(
             'prepareMintNfts', {
@@ -307,7 +312,7 @@ class Account:
         ))
 
     def prepare_output(self, output_options, transaction_options: Optional[TransactionOptions] = None):
-        """Prepare an output for sending
+        """Prepare an output for sending.
            If the amount is below the minimum required storage deposit, by default the remaining amount will automatically
            be added with a StorageDepositReturn UnlockCondition, when setting the ReturnStrategy to `gift`, the full
            minimum required storage deposit will be sent to the recipient.
@@ -357,8 +362,8 @@ class Account:
 
     def sync(self, options: Optional[SyncOptions] = None) -> Balance:
         """Sync the account by fetching new information from the nodes.
-           Will also retry pending transactions and consolidate outputs if necessary.
-           A custom default can be set using set_default_sync_options
+        Will also retry pending transactions and consolidate outputs if necessary.
+        A custom default can be set using set_default_sync_options.
         """
         return from_dict(Balance, self._call_account_method(
             'sync', {
@@ -409,7 +414,7 @@ class Account:
 
     def set_default_sync_options(self, options: SyncOptions):
         """Set the fallback SyncOptions for account syncing.
-           If storage is enabled, will persist during restarts.
+        If storage is enabled, will persist during restarts.
         """
         return self._call_account_method(
             'setDefaultSyncOptions', {

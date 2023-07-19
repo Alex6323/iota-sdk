@@ -10,14 +10,14 @@ from typing import Any, Dict, List, Optional
 
 
 class Wallet():
-    """Represents an IOTA Wallet.
+    """An IOTA Wallet.
 
     Attributes:
-        handle (wallet instance): the wallet handle
+        handle: The wallet handle.
     """
 
     def __init__(self, storage_path: Optional[str] = None, client_options: Optional[Dict[str, Any]] = None, coin_type: Optional[int] = None, secret_manager: Optional[LedgerNanoSecretManager | MnemonicSecretManager | SeedSecretManager | StrongholdSecretManager] = None):
-        """Initialize the IOTA Wallet.
+        """Initialize `self`.
         """
 
         # Setup the options
@@ -35,17 +35,19 @@ class Wallet():
         self.handle = create_wallet(options_str)
 
     def get_handle(self):
+        """Return the wallet handle.
+        """
         return self.handle
 
     def create_account(self, alias: Optional[str] = None, bech32_hrp: Optional[str] = None) -> Account:
         """Create a new account.
 
         Args:
-            alias (str, optional): the alias of the account
-            bech32_hrp (str, optional): the bech32 HRP of the account
+            alias: The alias of the newaccount.
+            bech32_hrp: The Bech32 HRP of the new account.
 
         Returns:
-            Account: an account instance
+            An account object.
         """
         account_data = self._call_method(
             'createAccount', {
@@ -56,7 +58,7 @@ class Wallet():
         return Account(account_data, self.handle)
 
     def get_account(self, account_id: str | int) -> Account:
-        """Get the account instance.
+        """Get the account associated with the given account ID or index.
         """
         account_data = self._call_method(
             'getAccount', {
@@ -66,12 +68,12 @@ class Wallet():
         return Account(account_data, self.handle)
 
     def get_client(self):
-        """Get the client instance.
+        """Get the client associated with the wallet.
         """
         return Client(client_handle=get_client_from_wallet(self.handle))
 
     def get_secret_manager(self):
-        """Get the secret manager instance.
+        """Get the secret manager associated with the wallet.
         """
         return SecretManager(secret_manager_handle=get_secret_manager_from_wallet(self.handle))
 
@@ -85,7 +87,7 @@ class Wallet():
         return message
 
     def get_account_data(self, account_id: str | int):
-        """Get account data.
+        """Get account data associated with the given account ID or index.
         """
         return self._call_method(
             'getAccount', {
@@ -94,7 +96,7 @@ class Wallet():
         )
 
     def get_accounts(self):
-        """Get accounts.
+        """Get all accounts.
         """
         return self._call_method(
             'getAccounts',
@@ -128,7 +130,7 @@ class Wallet():
         )
 
     def is_stronghold_password_available(self) -> bool:
-        """Is stronghold password available.
+        """Return whether a Stronghold password is available.
         """
         return self._call_method(
             'isStrongholdPasswordAvailable'
@@ -155,9 +157,10 @@ class Wallet():
 
     def restore_backup(self, source: str, password: str):
         """Restore a backup from a Stronghold file.
-        Replaces client_options, coin_type, secret_manager and accounts. Returns an error if accounts were already created
-        If Stronghold is used as secret_manager, the existing Stronghold file will be overwritten. If a mnemonic was
-        stored, it will be gone.
+        Replaces `client_options`, `coin_type`, `secret_manager` and accounts.
+        Returns an error if accounts were already created. If Stronghold is used
+        as the secret_manager, the existing Stronghold file will be overwritten.
+        Be aware that if a mnemonic was stored, it will be lost.
         """
         return self._call_method(
             'restoreBackup', {
@@ -167,14 +170,14 @@ class Wallet():
         )
 
     def generate_mnemonic(self) -> str:
-        """Generates a new mnemonic.
+        """Generate a new mnemonic.
         """
         return self._call_method(
             'generateMnemonic'
         )
 
     def verify_mnemonic(self, mnemonic: str):
-        """Checks if the given mnemonic is valid.
+        """Check if the given mnemonic is valid.
         """
         return self._call_method(
             'verifyMnemonic', {
@@ -183,7 +186,7 @@ class Wallet():
         )
 
     def set_client_options(self, client_options):
-        """Updates the client options for all accounts.
+        """Update the client options for all accounts.
         """
         return self._call_method(
             'setClientOptions',
