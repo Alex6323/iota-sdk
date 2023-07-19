@@ -30,14 +30,14 @@ class Node():
     """
 
     def __init__(self, url=None, jwt=None, username=None, password=None, disabled=None):
-        """Initialize a Node
+        """Initialize a Node.
 
         Args:
-            url (str, optional): Node url
-            jwt (str, optional): JWT token
-            username (str, optional): Username for basic authentication
-            password (str, optional): Password for basic authentication
-            disabled (bool, optional): Disable node
+            url: The node url.
+            jwt: A JWT token for authentication.
+            username: A username for basic authentication.
+            password: A password for basic authentication.
+            disabled: TODO.
         """
         self.url = url
         self.jwt = jwt
@@ -70,8 +70,8 @@ class AddressAndAmount():
         """Initialize AddressAndAmount.
 
         Args:
-            address (str): receive address
-            amount (int): amount of coins to send
+            address: The receive address.
+            amount: The base coin amount to send.
         """
         self.address = address
         self.amount = amount
