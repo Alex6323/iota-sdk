@@ -43,6 +43,7 @@ class Account:
         meta: Some account metadata.
         handle: The account handle.
     """
+
     def __init__(self, meta: dict, handle):
         """Initialize an account.
         """

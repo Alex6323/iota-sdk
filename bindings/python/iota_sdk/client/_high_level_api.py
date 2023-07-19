@@ -18,6 +18,7 @@ class Range:
         start: The start index of the address range.
         end: The end index of the address range.
     """
+
     def __init__(self, start: int, end: int):
         self.start = start
         self.end = end
@@ -25,11 +26,12 @@ class Range:
 
 class GenerateAddressOptions():
     """Options for generating an address.
-    
+
     Attributes:
         internal: Whether to generate an internal address.
         ledgerNanoPrompt: Whether to display the generated address on Ledger Nano devices.
     """
+
     def __init__(self, internal: bool, ledgerNanoPrompt: bool):
         """Initialize GenerateAddressOptions.
         """
@@ -47,6 +49,7 @@ class GenerateAddressesOptions():
         accountIndex: An account index.
         options: An instance of `GenerateAddressOptions`.
     """
+
     def __init__(self, coinType: CoinType,
                  range: range,
                  bech32Hrp: str,

@@ -33,8 +33,9 @@ class Payload():
         tagged_data: A `TaggedData` object if it represents a tagged data payload.
         transaction: A `Transaction` object if it represents a transaction payload.
         treasury_transaction: A `TreasuryTransaction` object if it represents a treasury transaction payload.
-        
+
     """
+
     def __init__(self, type, milestone: Optional[Any] = None, tagged_data=None,
                  transaction=None, treasury_transaction: Optional[Any] = None):
         """Initialize a payload.
@@ -106,6 +107,7 @@ class TaggedDataPayload(Payload):
         tag: The tag part of the tagged data payload.
         data: The data part of the tagged data payload.
     """
+
     def __init__(self, tag: HexStr, data: HexStr):
         """Initialize a tagged data payload.
         """
@@ -121,6 +123,7 @@ class TransactionPayload(Payload):
         essence: The transaction essence.
         unlocks: The unlocks of the transaction.
     """
+
     def __init__(self, essence, unlocks):
         """Initialize a transaction payload.
         """
