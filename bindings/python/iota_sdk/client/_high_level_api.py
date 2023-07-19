@@ -212,7 +212,7 @@ class HighLevelAPI():
             block_id: A block id of a block that should be reattached.
 
         Returns:
-            The list of reattached blocks.
+            The reattached block id and block.
         """
         result = self._call_method('reattach', {
             'blockId': block_id
@@ -227,7 +227,7 @@ class HighLevelAPI():
             block_id: A block id of a block that should be reattached.
 
         Returns:
-            The list of reattached blocks.
+            The reattached block id and block.
         """
         result = self._call_method('reattachUnchecked', {
             'blockId': block_id
@@ -243,7 +243,7 @@ class HighLevelAPI():
             block_id: A block id of a block that should be promoted.
 
         Returns:
-            The list of promoted blocks.
+            The block id and block that promoted the provided block.
         """
         result = self._call_method('promote', {
             'blockId': block_id
@@ -258,7 +258,7 @@ class HighLevelAPI():
             block_id: A block id of a block that should be promoted.
 
         Returns:
-            The list of promoted blocks.
+            The block id and block that promoted the provided block.
         """
         result = self._call_method('promoteUnchecked', {
             'blockId': block_id
