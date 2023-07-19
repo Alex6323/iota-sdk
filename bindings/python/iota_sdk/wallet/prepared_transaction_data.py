@@ -3,6 +3,7 @@
 
 from iota_sdk.types.transaction import Transaction
 
+
 class PreparedTransactionData:
     """A helper class for offline signing.
 
@@ -20,12 +21,10 @@ class PreparedTransactionData:
         self.account = account
         self.prepared_transaction_data_dto = prepared_transaction_data
 
-    
     def prepared_transaction_data(self):
         """Get the prepared transaction data.
         """
         return self.prepared_transaction_data_dto
-
 
     def send(self) -> Transaction:
         """Send a transaction. Internally just calls `sign_and_submit_transaction`.
@@ -35,21 +34,21 @@ class PreparedTransactionData:
         """
         return self.sign_and_submit_transaction()
 
-
     def sign(self):
         """Sign a prepared transaction essence using the account's private key and returns
         the signed transaction essence.
         """
-        return self.account.sign_transaction_essence(self.prepared_transaction_data())
+        return self.account.sign_transaction_essence(
+            self.prepared_transaction_data())
 
-    
     def sign_and_submit_transaction(self) -> Transaction:
         """Sign and submit a transaction using prepared transaction data.
 
         Returns: 
             The transaction after it has been signed and submitted.
         """
-        return self.account.sign_and_submit_transaction(self.prepared_transaction_data())
+        return self.account.sign_and_submit_transaction(
+            self.prepared_transaction_data())
 
 class PreparedCreateTokenTransaction(PreparedTransactionData):
     """A prepared transaction for creating a native token.

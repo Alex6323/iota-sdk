@@ -6,8 +6,6 @@ from typing import NewType
 
 HexStr = NewType("HexStr", str)
 
-HD_WALLET_TYPE = 44
-HARDEN_MASK = 1 << 31;
 
 class CoinType(IntEnum):
     """Coin types.
@@ -28,8 +26,8 @@ class CoinType(IntEnum):
 class Node():
     """Represents a node in the network.
     """
-
-    def __init__(self, url=None, jwt=None, username=None, password=None, disabled=None):
+    def __init__(self, url=None, jwt=None, username=None,
+                 password=None, disabled=None):
         """Initialize a Node.
 
         Args:
@@ -46,7 +44,7 @@ class Node():
         self.disabled = disabled
 
     def as_dict(self):
-        config = {k: v for k, v in self.__dict__.items() if v != None}
+        config = {k: v for k, v in self.__dict__.items() if v is not None}
 
         if 'jwt' in config or 'username' in config or 'password' in config:
             config['auth'] = {}
@@ -77,7 +75,7 @@ class AddressAndAmount():
         self.amount = amount
 
     def as_dict(self):
-        config = {k: v for k, v in self.__dict__.items() if v != None}
+        config = {k: v for k, v in self.__dict__.items() if v is not None}
 
         if 'amount' in config:
             config['amount'] = str(config['amount'])

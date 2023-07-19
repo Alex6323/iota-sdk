@@ -36,7 +36,7 @@ class Address():
     nftId: Optional[HexStr] = None
 
     def as_dict(self):
-        return {k: v for k, v in self.__dict__.items() if v != None}
+        return {k: v for k, v in self.__dict__.items() if v is not None}
 
 
 class Ed25519Address(Address):
@@ -73,3 +73,23 @@ class NFTAddress(Address):
             address_or_id: The hex encoded address to use.
         """
         super().__init__(AddressType.NFT, nftId=address_or_id)
+
+
+@dataclass
+class AccountAddress():
+    """An Address of the Account.
+    """
+    address: str
+    keyIndex: int
+    internal: bool
+    used: bool
+
+
+@dataclass
+class AddressWithUnspentOutputs():
+    """An Address with unspent outputs.
+    """
+    address: str
+    keyIndex: int
+    internal: bool
+    outputIds: bool

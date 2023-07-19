@@ -9,6 +9,7 @@ import humps
 from typing import List, Optional
 from dacite import from_dict
 
+
 class LedgerNanoSecretManager(dict):
     """Secret manager that uses a Ledger Nano hardware wallet or a Speculos simulator.
     """
@@ -79,14 +80,14 @@ class SecretManagerError(Exception):
 
 
 class SecretManager():
-    def __init__(self, secret_manager: Optional[LedgerNanoSecretManager | MnemonicSecretManager | SeedSecretManager | StrongholdSecretManager] = None, secret_manager_handle=None):
+    def __init__(self, secret_manager: Optional[LedgerNanoSecretManager | MnemonicSecretManager |
+                 SeedSecretManager | StrongholdSecretManager] = None, secret_manager_handle=None):
         """Initialize a secret manager.
 
         Args:
             secret_manager: One of the supported secret managers.
             secret_manager_handle: A handle to a secret manager.
         """
-
         if secret_manager_handle is None:
             self.handle = create_secret_manager(dumps(secret_manager))
         else:
@@ -117,13 +118,13 @@ class SecretManager():
             return response
 
     def generate_ed25519_addresses(self,
-                           account_index: Optional[int] = None,
-                           start: Optional[int] = None,
-                           end: Optional[int] = None,
-                           internal: Optional[bool] = None,
-                           coin_type: Optional[int] = None,
-                           bech32_hrp: Optional[str] = None,
-                           ledger_nano_prompt: Optional[bool] = None):
+                                   account_index: Optional[int] = None,
+                                   start: Optional[int] = None,
+                                   end: Optional[int] = None,
+                                   internal: Optional[bool] = None,
+                                   coin_type: Optional[int] = None,
+                                   bech32_hrp: Optional[str] = None,
+                                   ledger_nano_prompt: Optional[bool] = None) -> List[str]:
         """Generate Ed25519 addresses.
 
         Args:
@@ -141,7 +142,7 @@ class SecretManager():
         options = dict(locals())
         del options['self']
 
-        options = {k: v for k, v in options.items() if v != None}
+        options = {k: v for k, v in options.items() if v is not None}
 
         is_start_set = 'start' in options
         is_end_set = 'end' in options
@@ -160,7 +161,8 @@ class SecretManager():
         if 'ledger_nano_prompt' in options:
             if 'options' not in options:
                 options['options'] = {}
-            options['options']['ledger_nano_prompt'] = options.pop('ledger_nano_prompt')
+            options['options']['ledger_nano_prompt'] = options.pop(
+                'ledger_nano_prompt')
 
         options = humps.camelize(options)
 
@@ -169,12 +171,12 @@ class SecretManager():
         })
 
     def generate_evm_addresses(self,
-                           account_index: Optional[int] = None,
-                           start: Optional[int] = None,
-                           end: Optional[int] = None,
-                           internal: Optional[bool] = None,
-                           coin_type: Optional[int] = None,
-                           ledger_nano_prompt: Optional[bool] = None):
+                               account_index: Optional[int] = None,
+                               start: Optional[int] = None,
+                               end: Optional[int] = None,
+                               internal: Optional[bool] = None,
+                               coin_type: Optional[int] = None,
+                               ledger_nano_prompt: Optional[bool] = None):
         """Generate EVM addresses.
 
         Args:
@@ -191,7 +193,7 @@ class SecretManager():
         options = dict(locals())
         del options['self']
 
-        options = {k: v for k, v in options.items() if v != None}
+        options = {k: v for k, v in options.items() if v is not None}
 
         is_start_set = 'start' in options
         is_end_set = 'end' in options

@@ -3,11 +3,12 @@
 
 # This example creates a new database and account.
 
-from iota_sdk import Wallet, StrongholdSecretManager, SyncOptions, CoinType
+from iota_sdk import Wallet, StrongholdSecretManager, SyncOptions, CoinType, ClientOptions
 from dotenv import load_dotenv
 import os
 
-# This example uses secrets in environment variables for simplicity which should not be done in production.
+# This example uses secrets in environment variables for simplicity which
+# should not be done in production.
 load_dotenv()
 
 if 'WALLET_DB_PATH' not in os.environ:
@@ -22,9 +23,7 @@ if 'STRONGHOLD_PASSWORD' not in os.environ:
 if 'MNEMONIC' not in os.environ:
     raise Exception(".env MNEMONIC is undefined, see .env.example")
 
-client_options = {
-    'nodes': [os.environ.get('NODE_URL')],
-}
+client_options = ClientOptions(nodes=[os.environ.get('NODE_URL')])
 
 secret_manager = StrongholdSecretManager(
     os.environ.get('STRONGHOLD_SNAPSHOT_PATH'), os.environ['STRONGHOLD_PASSWORD'])
@@ -32,7 +31,8 @@ secret_manager = StrongholdSecretManager(
 wallet = Wallet(os.environ.get('WALLET_DB_PATH'),
                 client_options, CoinType.IOTA, secret_manager)
 
-# Store the mnemonic in the Stronghold snapshot, this only needs to be done once
+# Store the mnemonic in the Stronghold snapshot, this only needs to be
+# done once.
 wallet.store_mnemonic(
     os.environ['MNEMONIC'])
 

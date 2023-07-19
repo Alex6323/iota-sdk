@@ -3,6 +3,7 @@
 
 from enum import IntEnum
 
+
 class WalletEventType(IntEnum):
     """Types of wallet events.
     

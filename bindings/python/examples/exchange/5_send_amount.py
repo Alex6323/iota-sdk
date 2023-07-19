@@ -7,7 +7,8 @@ from iota_sdk import Wallet, SendParams, SyncOptions
 from dotenv import load_dotenv
 import os
 
-# This example uses secrets in environment variables for simplicity which should not be done in production.
+# This example uses secrets in environment variables for simplicity which
+# should not be done in production.
 load_dotenv()
 
 if 'WALLET_DB_PATH' not in os.environ:
@@ -28,10 +29,10 @@ wallet.set_stronghold_password(os.environ["STRONGHOLD_PASSWORD"])
 balance = account.sync(SyncOptions(sync_only_most_basic_outputs=True))
 print('Balance', balance)
 
-transaction = account.send([SendParams(
-    "rms1qpszqzadsym6wpppd6z037dvlejmjuke7s24hm95s9fg9vpua7vluaw60xu",
+transaction = account.send(
     1000000,
-)])
+    "rms1qpszqzadsym6wpppd6z037dvlejmjuke7s24hm95s9fg9vpua7vluaw60xu",
+)
 print(transaction)
 print(
     f'Check your block on: {os.environ["EXPLORER_URL"]}/block/{transaction.blockId}')

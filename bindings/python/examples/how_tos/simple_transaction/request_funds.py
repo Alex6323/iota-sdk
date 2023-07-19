@@ -6,13 +6,15 @@ import os
 
 load_dotenv()
 
-FAUCET_URL = os.environ.get('FAUCET_URL', 'https://faucet.testnet.shimmer.network/api/enqueue')
+FAUCET_URL = os.environ.get(
+    'FAUCET_URL',
+    'https://faucet.testnet.shimmer.network/api/enqueue')
 
 wallet = Wallet(os.environ['WALLET_DB_PATH'])
 
 account = wallet.get_account('Alice')
 
-address = account.addresses()[0]['address']
+address = account.addresses()[0].address
 print(address)
 
 response = wallet.get_client().request_funds_from_faucet(FAUCET_URL, address=address)

@@ -11,6 +11,7 @@ from iota_sdk.types.block import Block
 from iota_sdk.types.common import HexStr, Node, AddressAndAmount
 from iota_sdk.types.feature import Feature
 from iota_sdk.types.native_token import NativeToken
+from iota_sdk.types.network_info import NetworkInfo
 from iota_sdk.types.output import Output
 from iota_sdk.types.token_scheme import TokenScheme
 from iota_sdk.types.unlock_condition import UnlockCondition
@@ -75,7 +76,8 @@ class Client(NodeCoreAPI, NodeIndexerAPI, HighLevelAPI, ClientUtils):
         tips_interval :
             Tips request interval during PoW in seconds.
         quorum :
-            If node quorum is enabled. Will compare the responses from multiple nodes and only returns the response if 'quorum_threshold'% of the nodes return the same one.
+            If node quorum is enabled. Will compare the responses from multiple nodes
+            and only returns the response if `quorum_threshold`% of the nodes return the same one.
         min_quorum_size :
             Minimum amount of nodes required for request when quorum is enabled.
         quorum_threshold :
@@ -93,7 +95,8 @@ class Client(NodeCoreAPI, NodeIndexerAPI, HighLevelAPI, ClientUtils):
         """
         client_config = dict(locals())
         del client_config['self']
-        # Delete client_handle, because it's not needed here and can't be serialized
+        # Delete client_handle, because it's not needed here and can't be
+        # serialized.
         if "client_handle" in client_config:
             del client_config["client_handle"]
 
@@ -107,10 +110,13 @@ class Client(NodeCoreAPI, NodeIndexerAPI, HighLevelAPI, ClientUtils):
                 nodes = [nodes]
         client_config['nodes'] = nodes
 
-        client_config = {k: v for k, v in client_config.items() if v != None}
+        client_config = {
+            k: v for k,
+            v in client_config.items() if v is not None}
 
         def get_remaining_nano_seconds(duration: timedelta):
-            return (int(duration/timedelta(microseconds=1))-int(duration.total_seconds())*1_000_000)*1_000
+            return (int(duration / timedelta(microseconds=1)) -
+                    int(duration.total_seconds()) * 1_000_000) * 1_000
 
         if 'api_timeout' in client_config:
             client_config['api_timeout'] = {'secs': int(client_config['api_timeout'].total_seconds(
@@ -387,10 +393,13 @@ class Client(NodeCoreAPI, NodeIndexerAPI, HighLevelAPI, ClientUtils):
         del options['self']
         del options['secret_manager']
 
-        options = {k: v for k, v in options.items() if v != None}
+        options = {k: v for k, v in options.items() if v is not None}
 
         if 'output' in options:
             options['output'] = options.pop('output').as_dict()
+
+        if 'outputs' in options:
+            options['outputs'] = [v.as_dict() for v in options['outputs']]
 
         if 'coin_type' in options:
             options['coin_type'] = int(options.pop('coin_type'))
@@ -418,10 +427,10 @@ class Client(NodeCoreAPI, NodeIndexerAPI, HighLevelAPI, ClientUtils):
         """
         return self._call_method('getNode')
 
-    def get_network_info(self) -> Dict[str, Any]:
+    def get_network_info(self) -> NetworkInfo:
         """Gets the network related information such as network_id and min_pow_score.
         """
-        return self._call_method('getNetworkInfo')
+        return from_dict(NetworkInfo, self._call_method('getNetworkInfo'))
 
     def get_network_id(self) -> int:
         """Gets the network id of the node we're connecting to.

@@ -9,7 +9,8 @@ import json
 import os
 import time
 
-# This example uses secrets in environment variables for simplicity which should not be done in production.
+# This example uses secrets in environment variables for simplicity which
+# should not be done in production.
 load_dotenv()
 
 if 'WALLET_DB_PATH' not in os.environ:
@@ -41,7 +42,7 @@ account = wallet.get_account('Alice')
 print('Fill your address with the faucet: https://faucet.testnet.shimmer.network/')
 
 addresses = account.addresses()
-print('Send funds to:', addresses[0]["address"])
+print('Send funds to:', addresses[0].address)
 
 # Sync every 5 seconds until the faucet transaction gets confirmed.
 for _ in range(100):
@@ -51,5 +52,6 @@ for _ in range(100):
 
     # Sync to detect new outputs
     # Set sync_only_most_basic_outputs to True if not interested in outputs that are timelocked,
-    # have a storage deposit return , expiration or are nft/alias/foundry outputs.
+    # have a storage deposit return , expiration or are nft/alias/foundry
+    # outputs.
     account.sync(SyncOptions(sync_only_most_basic_outputs=True))

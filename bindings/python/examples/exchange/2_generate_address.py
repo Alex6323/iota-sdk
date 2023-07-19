@@ -7,7 +7,8 @@ from iota_sdk import Wallet
 from dotenv import load_dotenv
 import os
 
-# This example uses secrets in environment variables for simplicity which should not be done in production.
+# This example uses secrets in environment variables for simplicity which
+# should not be done in production.
 load_dotenv()
 
 if 'WALLET_DB_PATH' not in os.environ:
@@ -22,4 +23,4 @@ wallet.set_stronghold_password(os.environ["STRONGHOLD_PASSWORD"])
 account = wallet.get_account('Alice')
 
 address = account.generate_ed25519_addresses(1)[0]
-print(f'Address:', address['address'])
+print(f'Address:', address.address)

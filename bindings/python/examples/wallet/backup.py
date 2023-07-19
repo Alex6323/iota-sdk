@@ -1,4 +1,4 @@
-from iota_sdk import Wallet, StrongholdSecretManager, CoinType
+from iota_sdk import Wallet, StrongholdSecretManager, CoinType, ClientOptions
 from dotenv import load_dotenv
 import os
 
@@ -7,9 +7,7 @@ load_dotenv()
 # This example creates a new database and account
 
 node_url = os.environ.get('NODE_URL', 'https://api.testnet.shimmer.network')
-client_options = {
-    'nodes': [node_url],
-}
+client_options = ClientOptions(nodes=[node_url])
 
 # Shimmer coin type
 coin_type = CoinType.SHIMMER
@@ -21,12 +19,13 @@ secret_manager = StrongholdSecretManager(
     os.environ['STRONGHOLD_SNAPSHOT_PATH'], os.environ['STRONGHOLD_PASSWORD'])
 
 wallet = Wallet('./backup-database', client_options,
-                    coin_type, secret_manager)
+                coin_type, secret_manager)
 
 if 'MNEMONIC' not in os.environ:
     raise Exception(".env MNEMONIC is undefined, see .env.example")
 
-# Store the mnemonic in the Stronghold snapshot, this only needs to be done once
+# Store the mnemonic in the Stronghold snapshot, this only needs to be
+# done once.
 account = wallet.store_mnemonic(os.environ['MNEMONIC'])
 
 accounts = wallet.create_account('Alice')
