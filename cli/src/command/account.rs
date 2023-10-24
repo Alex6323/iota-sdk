@@ -1,7 +1,7 @@
 // Copyright 2023 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
-use std::str::FromStr;
+use std::{fmt::Write, str::FromStr};
 
 use clap::{CommandFactory, Parser, Subcommand};
 use iota_sdk::{
@@ -955,6 +955,14 @@ pub async fn voting_output_command(account: &Account) -> Result<(), Error> {
     println_log_info!("Voting output: {output:?}");
 
     Ok(())
+}
+
+// Wrapper for writeln that unwraps the inner error
+// Fine to use when writing is infallible (i.e. String)
+macro_rules! writeln {
+    ($($input:tt)+) => {
+        std::writeln!($($input)+).unwrap()
+    };
 }
 
 async fn print_address(account: &Account, address: &Bech32Address) -> Result<(), Error> {
