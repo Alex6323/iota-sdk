@@ -56,8 +56,8 @@ where
     // pub async fn get_participation_overview(
     //     &self,
     //     event_ids: Option<Vec<ParticipationEventId>>,
-    // ) -> Result<ParticipationOverview> { log::debug!("[get_participation_overview]"); // TODO: Could use the address endpoint
-    //   in the future when https://github.com/iotaledger/inx-participation/issues/50 is done.
+    // ) -> Result<ParticipationOverview> { log::debug!("[get_participation_overview]"); // TODO: Could use the address
+    // endpoint   in the future when https://github.com/iotaledger/inx-participation/issues/50 is done.
 
     // let mut spent_cached_outputs = self.storage_manager().get_cached_participation_output_status().await?;
     // let restored_spent_cached_outputs_len = spent_cached_outputs.len();
@@ -95,7 +95,7 @@ where
     //                         entry.get_mut().push(output_data.output_id);
     //                     }
     //                 }
-    //                 if output_data.is_spent {
+    //                 if output_data.is_spent() {
     //                     spent_outputs.insert(output_data.output_id);
     //                 }
     //             }

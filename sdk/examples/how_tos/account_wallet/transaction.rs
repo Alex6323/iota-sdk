@@ -9,7 +9,7 @@
 use iota_sdk::{
     client::node_api::indexer::query_parameters::BasicOutputQueryParameters,
     types::block::address::{AccountAddress, ToBech32Ext},
-    wallet::{AccountSyncOptions, Result, SyncOptions, TransactionOptions},
+    wallet::{AccountSyncOptions, BlockOptions, Result, SyncOptions, TransactionOptions},
     Wallet,
 };
 
@@ -65,10 +65,10 @@ async fn main() -> Result<()> {
         .send(
             1_000_000,
             "rms1qpszqzadsym6wpppd6z037dvlejmjuke7s24hm95s9fg9vpua7vluaw60xu",
-            TransactionOptions {
+            BlockOptions::from(TransactionOptions {
                 mandatory_inputs: Some(vec![input]),
                 ..Default::default()
-            },
+            }),
         )
         .await?;
     wallet

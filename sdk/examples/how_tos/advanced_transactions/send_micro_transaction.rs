@@ -12,7 +12,7 @@
 //! ```
 
 use iota_sdk::{
-    wallet::{Result, TransactionOptions},
+    wallet::{BlockOptions, Result, TransactionOptions},
     Wallet,
 };
 
@@ -51,10 +51,10 @@ async fn main() -> Result<()> {
         .send(
             SEND_MICRO_AMOUNT,
             RECV_ADDRESS,
-            TransactionOptions {
+            BlockOptions::from(TransactionOptions {
                 allow_micro_amount: true,
                 ..Default::default()
-            },
+            }),
         )
         .await?;
     println!("Transaction sent: {}", transaction.transaction_id);

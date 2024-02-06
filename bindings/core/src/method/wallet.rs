@@ -1,4 +1,4 @@
-// Copyright 2023 IOTA Stiftung
+// Copyright 2024 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
 #[cfg(feature = "stronghold")]
@@ -22,13 +22,13 @@ use iota_sdk::{
     },
     types::block::{
         address::{Bech32Address, Hrp},
-        output::{Output, OutputId, TokenId},
+        output::{DelegationId, Output, OutputId, TokenId},
         payload::signed_transaction::TransactionId,
     },
     wallet::{
-        ClientOptions, ConsolidationParams, CreateAccountParams, CreateNativeTokenParams, FilterOptions, MintNftParams,
-        OutputParams, OutputsToClaim, SendNativeTokenParams, SendNftParams, SendParams, SyncOptions,
-        TransactionOptions,
+        BlockOptions, ClientOptions, ConsolidationParams, CreateAccountParams, CreateDelegationParams,
+        CreateNativeTokenParams, FilterOptions, MintNftParams, OutputParams, OutputsToClaim, SendNativeTokenParams,
+        SendNftParams, SendParams, SyncOptions,
     },
     U256,
 };
@@ -215,17 +215,14 @@ pub enum WalletMethod {
     /// Returns all pending transactions of the wallet.
     /// Expected response: [`Transactions`](crate::Response::Transactions)
     PendingTransactions,
-    /// A generic function that can be used to burn native tokens, nfts, foundries and accounts.
+    /// A generic function that can be used to burn native tokens, nfts, delegations, foundries and accounts.
     ///
     /// Note that burning **native tokens** doesn't require the foundry output which minted them, but will not
     /// increase the foundries `melted_tokens` field, which makes it impossible to destroy the foundry output.
     /// Therefore it's recommended to use melting, if the foundry output is available.
     ///
     /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
-    PrepareBurn {
-        burn: Burn,
-        options: Option<TransactionOptions>,
-    },
+    PrepareBurn { burn: Burn, options: Option<BlockOptions> },
     /// Claim outputs.
     /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
     #[serde(rename_all = "camelCase")]
@@ -237,14 +234,14 @@ pub enum WalletMethod {
     /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
     PrepareCreateAccountOutput {
         params: Option<CreateAccountParams>,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     /// Prepare to create a native token.
     /// Expected response:
     /// [`PreparedCreateNativeTokenTransaction`](crate::Response::PreparedCreateNativeTokenTransaction)
     PrepareCreateNativeToken {
         params: CreateNativeTokenParams,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     // /// Reduces a wallet's "voting power" by a given amount.
     // /// This will stop voting, but the voting data isn't lost and calling `Vote` without parameters will revote.
@@ -275,7 +272,7 @@ pub enum WalletMethod {
         token_id: TokenId,
         /// To be melted amount
         melt_amount: U256,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     /// Prepare to mint additional native tokens.
     /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
@@ -285,38 +282,52 @@ pub enum WalletMethod {
         token_id: TokenId,
         /// To be minted amount
         mint_amount: U256,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     /// Prepare to mint NFTs.
     /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
     PrepareMintNfts {
         params: Vec<MintNftParams>,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     /// Prepare an output.
     /// Expected response: [`Output`](crate::Response::Output)
     #[serde(rename_all = "camelCase")]
     PrepareOutput {
         params: Box<OutputParams>,
-        transaction_options: Option<TransactionOptions>,
+        transaction_options: Option<BlockOptions>,
     },
     /// Prepare to send base coins.
     /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
     PrepareSend {
         params: Vec<SendParams>,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     /// Prepare to send native tokens.
     /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
     PrepareSendNativeTokens {
         params: Vec<SendNativeTokenParams>,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     /// Prepare to Send nft.
     /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
     PrepareSendNft {
         params: Vec<SendNftParams>,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
+    },
+    /// Prepare to create a delegation.
+    /// Expected response:
+    /// [`PreparedCreateDelegationTransaction`](crate::Response::PreparedCreateDelegationTransaction)
+    PrepareCreateDelegation {
+        params: CreateDelegationParams,
+        options: Option<BlockOptions>,
+    },
+    /// Prepare to delay a delegation's claiming.
+    /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
+    #[serde(rename_all = "camelCase")]
+    PrepareDelayDelegationClaiming {
+        delegation_id: DelegationId,
+        reclaim_excess: bool,
     },
     // /// Stop participating for an event.
     // /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
@@ -328,7 +339,7 @@ pub enum WalletMethod {
     /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
     PrepareTransaction {
         outputs: Vec<Output>,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     // /// Vote for a participation event.
     // /// Expected response: [`PreparedTransaction`](crate::Response::PreparedTransaction)
@@ -366,19 +377,19 @@ pub enum WalletMethod {
         #[serde(with = "iota_sdk::utils::serde::string")]
         amount: u64,
         address: Bech32Address,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     /// Send base coins to multiple addresses, or with additional parameters.
     /// Expected response: [`SentTransaction`](crate::Response::SentTransaction)
     SendWithParams {
         params: Vec<SendParams>,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     /// Send outputs in a transaction.
     /// Expected response: [`SentTransaction`](crate::Response::SentTransaction)
     SendOutputs {
         outputs: Vec<Output>,
-        options: Option<TransactionOptions>,
+        options: Option<BlockOptions>,
     },
     /// Set the alias of the wallet.
     /// Expected response: [`Ok`](crate::Response::Ok)

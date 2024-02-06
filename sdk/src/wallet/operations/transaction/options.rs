@@ -18,14 +18,14 @@ use crate::{
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct BlockOptions {
-    //
-    #[serde(default)]
+    /// TODO
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub issuer_id: Option<AccountId>,
-    //
-    #[serde(default)]
+    /// TODO
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub latest_slot_commitment_id: Option<SlotCommitmentId>,
-    //
-    #[serde(default)]
+    /// TODO
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub transaction_options: Option<TransactionOptions>,
 }
 
